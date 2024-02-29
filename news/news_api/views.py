@@ -20,6 +20,15 @@ def translateDate(date):
         return "Invalid date format"
 
 
+def dbdateToUk(data):
+    try:
+        date_obj = datetime.strptime(data, "%Y-%m-%dT%H:%M:%S.%fZ")
+        translated_date = date_obj.strftime("%d/%m/%Y")
+        return translated_date
+    except ValueError:
+        return "Invalid date format"
+
+
 @api_view(("POST",))
 def loginApiView(request):
     if request.content_type != "application/x-www-form-urlencoded":
@@ -157,7 +166,7 @@ def storyApiView(request):
                     "story_cat": item["category"],
                     "story_region": item["region"],
                     "author": item["author"],
-                    "story_date": item["story_date"],
+                    "story_date": dbdateToUk(item["story_date"]),
                     "story_details": item["details"],
                 }
                 resultArray.append(itemObject)
